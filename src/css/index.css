@@ -1,0 +1,28 @@
+.block{
+    height: 150px;
+    border: 5px solid aqua;
+    margin-bottom: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+.block MyButton{
+    width: 100px;
+    height: 50px;
+    align-self: end;
+    margin-top: -100px;
+    margin-right: 20px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+form h1{
+    background: none;
+    text-align: center;
+}
