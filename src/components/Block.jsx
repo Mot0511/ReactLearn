@@ -5,7 +5,7 @@ function Block({post, remove}){
     return(
         <div className="block">
             <h1>{post.title}</h1>
-            <p>{post.description}</p>
+            <p>{post.body}</p>
             <MyButton onClick={() => remove(post)}>Delete</MyButton>
         </div>
     )
