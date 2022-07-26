@@ -9,23 +9,29 @@ import axios from "axios";
 import {usePosts} from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import Loader from "./components/UI/loader/loader";
+import {useFetching} from "./hooks/useFetching";
+import {getPageCount} from "./utils/pages";
+import {getPagesArray} from "./utils/pages";
 
 function App() {
     let [posts, setPosts] = useState([])
     let [filter, setFilter] = useState({sort: '', query: ''})
     let [modal, setModal] = useState(false)
-    let [isLoading, setIsLoading] = useState(false)
+    let [totalPages, setTotalPages] = useState(0)
+    let [limit, setLimit] = useState(10)
+    let [page, setPage] = useState(1)
     let sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
+    let pagesArray = getPagesArray(totalPages)
 
-    async function fetchPosts() {
-        setIsLoading(true)
-        setTimeout(async () => {
-            const posts = await PostService.getAll()
-            setPosts(posts)
-            setIsLoading(false)
-        }, 2000)
-    }
+    console.log([pagesArray])
+    let [fetchPosts, isLoading, postError] = useFetching(async () => {
+        const response = await PostService.getAll(limit, page)
+        setPosts(response.data)
+        const totalCount = (response.headers['x-total-count'])
+        setTotalPages(getPageCount(totalCount, limit))
+    })
 
+    console.log(totalPages)
     useEffect(() => {
         fetchPosts()
     }, [ ])
@@ -52,6 +58,15 @@ function App() {
                   : <PostList remove={removePost} posts={sortedAndSearchedPosts} isLoading={isLoading} title={'Posts'} />
 
           }
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+          {
+              pagesArray.map(p =>
+
+                      <MyButton style={{width: '100px'}}>{p}</MyButton>
+
+              )
+          }
+          </div>
       </div>
 
   );
